@@ -23,6 +23,20 @@ static NSComparisonResult scrollerAboveSiblingViewsComparator(NSView *view1, NSV
     return NSOrderedSame;
 }
 
+- (id)initWithFrame:(NSRect)frameRect
+{
+    self = [super initWithFrame:frameRect];
+    if (self) {
+        self.wantsLayer = YES;
+    }
+    return self;
+}
+
+- (void)awakeFromNib
+{
+    self.wantsLayer = YES;
+}
+
 - (void)tile
 {
     // Fake zero scroller width so the contentView gets drawn to the edge
