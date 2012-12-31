@@ -24,7 +24,7 @@
 - (void)setFloatValue:(float)aFloat
 {
     [super setFloatValue:aFloat];
-    self.alphaValue = 1.0f;
+    [self.animator setAlphaValue:1.0f];
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(fadeOut) object:nil];
     [self performSelector:@selector(fadeOut) withObject:nil afterDelay:1.5f];
 }
