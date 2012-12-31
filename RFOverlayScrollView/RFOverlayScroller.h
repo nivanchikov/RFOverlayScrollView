@@ -1,6 +1,6 @@
 //
 //  RFTransparentScroller.h
-//  EISENHOWER
+//  RFOverlayScrollView
 //
 //  Created by Tim Brückmann on 30.12.12.
 //  Copyright (c) 2012 Rheinfabrik. All rights reserved.
