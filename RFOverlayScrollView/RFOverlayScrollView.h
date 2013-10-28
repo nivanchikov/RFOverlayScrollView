@@ -10,4 +10,8 @@
 
 @interface RFOverlayScrollView : NSScrollView
 
+@property int headerOffset;
+
+-(int)tableHeaderOffsetFromSuperview;
+
 @end
