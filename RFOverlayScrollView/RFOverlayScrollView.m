@@ -12,6 +12,8 @@
 
 @implementation RFOverlayScrollView
 
+@synthesize headerOffset;
+
 static NSComparisonResult scrollerAboveSiblingViewsComparator(NSView *view1, NSView *view2, void *context)
 {
     if ([view1 isKindOfClass:[RFOverlayScroller class]]) {
@@ -28,6 +30,7 @@ static NSComparisonResult scrollerAboveSiblingViewsComparator(NSView *view1, NSV
     self = [super initWithFrame:frameRect];
     if (self) {
         self.wantsLayer = YES;
+        headerOffset=[self tableHeaderOffsetFromSuperview];
     }
     return self;
 }
@@ -35,6 +38,7 @@ static NSComparisonResult scrollerAboveSiblingViewsComparator(NSView *view1, NSV
 - (void)awakeFromNib
 {
     self.wantsLayer = YES;
+    headerOffset=[self tableHeaderOffsetFromSuperview];
 }
 
 - (void)tile
@@ -52,14 +56,30 @@ static NSComparisonResult scrollerAboveSiblingViewsComparator(NSView *view1, NSV
                                                          scrollerStyle:self.verticalScroller.scrollerStyle];
 	[self.verticalScroller setFrame:(NSRect){
         self.bounds.size.width - width,
-        0.0f,
+        0.0f+headerOffset,
         width,
-        self.bounds.size.height
+        self.bounds.size.height-headerOffset
     }];
     
     // Move scroller to front
     [self sortSubviewsUsingFunction:scrollerAboveSiblingViewsComparator
                             context:NULL];
+}
+
+-(int)tableHeaderOffsetFromSuperview
+{
+    for (NSView* subView in [self subviews])
+    {
+        if ([subView isKindOfClass:[NSClipView class]])
+        {   for (id subView2 in [subView subviews])
+            {   if ([subView2 isKindOfClass:[NSTableView class]])
+                {
+                    return [subView2 headerView].frame.size.height;
+                }
+            }
+        }
+    }
+    return 0;
 }
 
 @end
