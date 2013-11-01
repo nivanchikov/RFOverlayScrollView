@@ -12,8 +12,6 @@
 
 @implementation RFOverlayScrollView
 
-@synthesize headerOffset;
-
 static NSComparisonResult scrollerAboveSiblingViewsComparator(NSView *view1, NSView *view2, void *context)
 {
     if ([view1 isKindOfClass:[RFOverlayScroller class]]) {
@@ -30,7 +28,7 @@ static NSComparisonResult scrollerAboveSiblingViewsComparator(NSView *view1, NSV
     self = [super initWithFrame:frameRect];
     if (self) {
         self.wantsLayer = YES;
-        headerOffset=[self tableHeaderOffsetFromSuperview];
+        _headerOffset = [self tableHeaderOffsetFromSuperview];
     }
     return self;
 }
@@ -38,7 +36,7 @@ static NSComparisonResult scrollerAboveSiblingViewsComparator(NSView *view1, NSV
 - (void)awakeFromNib
 {
     self.wantsLayer = YES;
-    headerOffset=[self tableHeaderOffsetFromSuperview];
+    _headerOffset = [self tableHeaderOffsetFromSuperview];
 }
 
 - (void)tile
@@ -56,9 +54,9 @@ static NSComparisonResult scrollerAboveSiblingViewsComparator(NSView *view1, NSV
                                                          scrollerStyle:self.verticalScroller.scrollerStyle];
 	[self.verticalScroller setFrame:(NSRect){
         self.bounds.size.width - width,
-        0.0f+headerOffset,
+        self.headerOffset,
         width,
-        self.bounds.size.height-headerOffset
+        self.bounds.size.height - self.headerOffset
     }];
     
     // Move scroller to front
@@ -66,15 +64,15 @@ static NSComparisonResult scrollerAboveSiblingViewsComparator(NSView *view1, NSV
                             context:NULL];
 }
 
--(int)tableHeaderOffsetFromSuperview
+- (NSInteger)tableHeaderOffsetFromSuperview
 {
-    for (NSView* subView in [self subviews])
+    for (NSView *subView in [self subviews])
     {
         if ([subView isKindOfClass:[NSClipView class]])
-        {   for (id subView2 in [subView subviews])
+        {   for (NSView *subView2 in [subView subviews])
             {   if ([subView2 isKindOfClass:[NSTableView class]])
                 {
-                    return [subView2 headerView].frame.size.height;
+                    return [(NSTableView *)subView2 headerView].frame.size.height;
                 }
             }
         }
