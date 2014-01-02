@@ -10,9 +10,38 @@
 
 @implementation RFOverlayScroller
 
+- (id)initWithFrame:(NSRect)frameRect
+{
+    self = [super initWithFrame:frameRect];
+    if (self == nil) {
+        return nil;
+    }
+    [self commonInitializer];
+    return self;
+}
+
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    [self commonInitializer];
+}
+
+- (void)commonInitializer
+{
+    NSTrackingArea *trackingArea = [[NSTrackingArea alloc] initWithRect:self.bounds
+                                                                options:(
+                                                                         NSTrackingMouseEnteredAndExited
+                                                                         | NSTrackingActiveInActiveApp
+                                                                         | NSTrackingMouseMoved
+                                                                         )
+                                                                  owner:self
+                                                               userInfo:nil];
+    [self addTrackingArea:trackingArea];
+}
+
 - (void)drawRect:(NSRect)dirtyRect
 {
-    // Only draw the know. drawRect: should only be invoked when overlay scrollers are not used
+    // Only draw the knob. drawRect: should only be invoked when overlay scrollers are not used
     [self drawKnob];
 }
 
@@ -50,21 +79,6 @@
 {
 	[super mouseMoved:theEvent];
     self.alphaValue = 1.0f;
-}
-
-- (void)updateTrackingAreas
-{
-    [super updateTrackingAreas];
-	
-    NSTrackingArea *trackingArea = [[NSTrackingArea alloc] initWithRect:self.bounds
-                                                                options:(
-                                                                         NSTrackingMouseEnteredAndExited
-                                                                         | NSTrackingActiveInActiveApp
-                                                                         | NSTrackingMouseMoved
-                                                                         )
-                                                                  owner:self
-                                                               userInfo:nil];
-    [self addTrackingArea:trackingArea];
 }
 
 - (void)fadeOut
