@@ -52,11 +52,18 @@ static NSComparisonResult scrollerAboveSiblingViewsComparator(NSView *view1, NSV
     // Resize vertical scroller
     CGFloat width = [RFOverlayScroller scrollerWidthForControlSize:self.verticalScroller.controlSize
                                                          scrollerStyle:self.verticalScroller.scrollerStyle];
+    
+    NSEdgeInsets insets = NSEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f);
+    
+    if ([self respondsToSelector: @selector(contentInsets)]) {
+        insets = [self contentInsets];
+    }
+    
 	[self.verticalScroller setFrame:(NSRect){
         self.bounds.size.width - width,
-        self.headerOffset,
+        self.headerOffset + insets.top,
         width,
-        self.bounds.size.height - self.headerOffset
+        self.bounds.size.height - self.headerOffset - insets.top
     }];
     
     // Move scroller to front
