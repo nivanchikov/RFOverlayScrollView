@@ -84,7 +84,7 @@
 - (void)fadeOut
 {
     [NSAnimationContext runAnimationGroup:^(NSAnimationContext *context) {
-        context.duration = 0.3f;
+        context.duration = 0.2f;
         [self.animator setAlphaValue:0.0f];
     } completionHandler:^{
     }];
